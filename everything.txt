@@ -1,0 +1,55 @@
+tried vgg16, resnet50,densenet,efficientnet,densenet121
+froze selective number of layers
+in general found densenet to do better
+proceeded to unfreeze all layers
+
+Accuracy: 22.98%(densenet121 without tmmrandaug, unfreezed only last 20 layers)
+Class-wise Metrics:
+              precision    recall  f1-score   support
+
+  earthquake       0.28      0.24      0.26       386
+       flood       0.23      0.23      0.23       306
+   hurricane       0.16      0.16      0.16       195
+  landslides       0.07      0.08      0.08        61
+    wildfire       0.25      0.28      0.26       336
+
+    accuracy                           0.23      1284
+   macro avg       0.20      0.20      0.20      1284
+weighted avg       0.23      0.23      0.23      1284
+
+
+Accuracy: 22.82% (densenet121 without tmmrandaug, also unfreezing all layers)
+Class-wise Metrics:
+              precision    recall  f1-score   support
+
+  earthquake       0.28      0.27      0.28       386
+       flood       0.26      0.24      0.25       306
+   hurricane       0.13      0.13      0.13       195
+  landslides       0.08      0.10      0.09        61
+    wildfire       0.24      0.25      0.24       336
+
+    accuracy                           0.23      1284
+   macro avg       0.20      0.20      0.20      1284
+weighted avg       0.23      0.23      0.23      1284
+
+Class-wise Accuracy:
+{'earthquake': 0.5708722741433022, 'flood': 0.6534267912772586, 'hurricane': 0.735981308411215, 'landslides': 0.9034267912772586, 'wildfire': 0.5926791277258567}
+
+
+same stuff as before+ changes made-making the ann part more dense:
+Accuracy: 23.75%
+Class-wise Metrics:
+              precision    recall  f1-score   support
+
+  earthquake       0.29      0.28      0.29       386
+       flood       0.24      0.24      0.24       306
+   hurricane       0.19      0.13      0.16       195
+  landslides       0.04      0.08      0.05        61
+    wildfire       0.28      0.27      0.28       336
+
+    accuracy                           0.24      1284
+   macro avg       0.21      0.20      0.20      1284
+weighted avg       0.25      0.24      0.24      1284
+
+Class-wise Accuracy:
+{'earthquake': 0.573208722741433, 'flood': 0.6409657320872274, 'hurricane': 0.780373831775701, 'landslides': 0.8512461059190031, 'wildfire': 0.6292834890965732}

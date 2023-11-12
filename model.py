@@ -1,11 +1,11 @@
+import os
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications import EfficientNetB7  # Change to EfficientNetB7
+from tensorflow.keras.applications import DenseNet121
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
 import numpy as np
 from sklearn.metrics import classification_report, accuracy_score
-from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
 # Define paths to the training and validation datasets
 train_data_dir = '/home/postman/dl_project_tanna/impainted_dataset/train'
@@ -16,13 +16,10 @@ img_width, img_height = 256, 256
 
 # Define parameters
 batch_size = 10
-epochs = 20  # Increase the number of epochs for more training
-num_classes = 5  # Number of classes (earthquake, wildfire, flood, landslides, hurricane)
+epochs = 70
+num_classes = 5
 
 # Data augmentation and normalization with more augmentation techniques
-
-#timm --> RandAugment --> rand_augment
-# COlor jittering
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
     shear_range=0.2,
@@ -51,45 +48,35 @@ validation_generator = validation_datagen.flow_from_directory(
     class_mode='categorical'
 )
 
-# Load pre-trained EfficientNetB7 model without the top layers
-base_model = EfficientNetB7(weights='imagenet', include_top=False, input_shape=(img_width, img_height, 3))
+base_model = DenseNet121(weights='imagenet', include_top=False, input_shape=(img_width, img_height, 3))
 
-# Add custom classification layers on top of EfficientNetB7
 model = Sequential()
 model.add(base_model)
 model.add(GlobalAveragePooling2D())
-model.add(Dense(1024, activation='relu'))  # Increase nodes in the dense layer
-model.add(Dropout(0.5))  # Introduce dropout for regularization
+model.add(Dense(512, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(256, activation='relu'))
+model.add(Dropout(0.3))  # Adjust the dropout rate as needed
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.2))  # Adjust the dropout rate as needed
 model.add(Dense(num_classes, activation='softmax'))
 
-# Smth x 1024 x 5 --> increase layers
-# Change pre-trained weights --> more similar or remove altogether
-# 
-
-# Unfreeze the last layers for fine-tuning
-for layer in base_model.layers[-20:]:
+for layer in base_model.layers:
     layer.trainable = True
 
-# Compile the model with a lower learning rate and using ReduceLROnPlateau
 model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
 
-early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=2, min_lr=1e-6)
-#BCEWithLogits
-# Train the model
+# Remove early stopping and reduce LR callbacks
 history = model.fit(
     train_generator,
     steps_per_epoch=train_generator.samples // batch_size,
     epochs=epochs,
     validation_data=validation_generator,
-    validation_steps=validation_generator.samples // batch_size,
-    callbacks=[early_stopping, reduce_lr]
+    validation_steps=validation_generator.samples // batch_size
 )
 
-# Predict on validation data using the best weights obtained from early stopping
 validation_preds = model.predict(validation_generator)
 
-# Rest of your evaluation code remains the same
 class_labels = list(validation_generator.class_indices.keys())
 true_labels = validation_generator.classes
 predicted_labels = np.argmax(validation_preds, axis=1)
@@ -100,3 +87,16 @@ report = classification_report(true_labels, predicted_labels, target_names=class
 print("Accuracy: {:.2f}%".format(accuracy * 100))
 print("Class-wise Metrics:")
 print(report)
+
+# Calculate class-wise accuracy
+class_accuracy = []
+for cls in class_labels:
+    cls_idx = class_labels.index(cls)
+    cls_true_labels = true_labels == cls_idx
+    cls_pred_labels = predicted_labels == cls_idx
+    cls_acc = accuracy_score(cls_true_labels, cls_pred_labels)
+    class_accuracy.append(cls_acc)
+
+class_accuracy_dict = dict(zip(class_labels, class_accuracy))
+print("Class-wise Accuracy:")
+print(class_accuracy_dict)
