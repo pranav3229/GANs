@@ -3,9 +3,10 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import DenseNet121
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
+from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization
 import numpy as np
 from sklearn.metrics import classification_report, accuracy_score
+from tensorflow.keras.regularizers import l2
 
 # Define paths to the training and validation datasets
 train_data_dir = '/home/postman/dl_project_tanna/impainted_dataset/train'
@@ -53,13 +54,26 @@ base_model = DenseNet121(weights='imagenet', include_top=False, input_shape=(img
 model = Sequential()
 model.add(base_model)
 model.add(GlobalAveragePooling2D())
-model.add(Dense(512, activation='relu'))
+model.add(Dense(1024, activation='relu', kernel_regularizer=l2(0.01)))
+model.add(BatchNormalization())
 model.add(Dropout(0.5))
-model.add(Dense(256, activation='relu'))
-model.add(Dropout(0.3))  # Adjust the dropout rate as needed
-model.add(Dense(128, activation='relu'))
-model.add(Dropout(0.2))  # Adjust the dropout rate as needed
+model.add(Dense(512, activation='relu', kernel_regularizer=l2(0.01)))
+model.add(BatchNormalization())
+model.add(Dropout(0.4))
+model.add(Dense(256, activation='relu', kernel_regularizer=l2(0.01)))
+model.add(BatchNormalization())
+model.add(Dropout(0.3))
+model.add(Dense(128, activation='relu', kernel_regularizer=l2(0.01)))
+model.add(BatchNormalization())
+model.add(Dropout(0.2))
+model.add(Dense(64, activation='relu', kernel_regularizer=l2(0.01)))
+model.add(BatchNormalization())
+model.add(Dropout(0.1))
+model.add(Dense(32, activation='relu', kernel_regularizer=l2(0.01)))
+model.add(BatchNormalization())
+model.add(Dropout(0.1))
 model.add(Dense(num_classes, activation='softmax'))
+
 
 for layer in base_model.layers:
     layer.trainable = True

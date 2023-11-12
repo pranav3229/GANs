@@ -71,3 +71,25 @@ weighted avg       0.24      0.25      0.24      1284
 
 Class-wise Accuracy:
 {'earthquake': 0.5957943925233645, 'flood': 0.6253894080996885, 'hurricane': 0.7476635514018691, 'landslides': 0.9135514018691588, 'wildfire': 0.6098130841121495}
+
+same as befor but 70 epochs:
+Accuracy: 25.62%
+Class-wise Metrics:
+              precision    recall  f1-score   support
+
+  earthquake       0.34      0.28      0.31       386
+       flood       0.26      0.27      0.26       306
+   hurricane       0.15      0.15      0.15       195
+  landslides       0.06      0.07      0.06        61
+    wildfire       0.27      0.30      0.29       336
+
+    accuracy                           0.26      1284
+   macro avg       0.22      0.22      0.22      1284
+weighted avg       0.26      0.26      0.26      1284
+
+Class-wise Accuracy:
+{'earthquake': 0.6230529595015576, 'flood': 0.6362928348909658, 'hurricane': 0.7398753894080997, 'landslides': 0.9057632398753894, 'wildfire': 0.6074766355140186}
+
+
+added more layers to dense layer+batch normalization+L2 regularization and also training for 300 epochs now:
+
