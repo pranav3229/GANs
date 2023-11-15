@@ -1,0 +1,155 @@
+tried vgg16, resnet50,densenet,efficientnet,densenet121
+froze selective number of layers
+in general found densenet to do better
+proceeded to unfreeze all layers
+
+Accuracy: 22.98%(densenet121 without tmmrandaug, unfreezed only last 20 layers)
+Class-wise Metrics:
+              precision    recall  f1-score   support
+
+  earthquake       0.28      0.24      0.26       386
+       flood       0.23      0.23      0.23       306
+   hurricane       0.16      0.16      0.16       195
+  landslides       0.07      0.08      0.08        61
+    wildfire       0.25      0.28      0.26       336
+
+    accuracy                           0.23      1284
+   macro avg       0.20      0.20      0.20      1284
+weighted avg       0.23      0.23      0.23      1284
+
+
+Accuracy: 22.82% (densenet121 without tmmrandaug, also unfreezing all layers)
+Class-wise Metrics:
+              precision    recall  f1-score   support
+
+  earthquake       0.28      0.27      0.28       386
+       flood       0.26      0.24      0.25       306
+   hurricane       0.13      0.13      0.13       195
+  landslides       0.08      0.10      0.09        61
+    wildfire       0.24      0.25      0.24       336
+
+    accuracy                           0.23      1284
+   macro avg       0.20      0.20      0.20      1284
+weighted avg       0.23      0.23      0.23      1284
+
+Class-wise Accuracy:
+{'earthquake': 0.5708722741433022, 'flood': 0.6534267912772586, 'hurricane': 0.735981308411215, 'landslides': 0.9034267912772586, 'wildfire': 0.5926791277258567}
+
+
+same stuff as before+ changes made-making the ann part more dense:
+Accuracy: 23.75%
+Class-wise Metrics:
+              precision    recall  f1-score   support
+
+  earthquake       0.29      0.28      0.29       386
+       flood       0.24      0.24      0.24       306
+   hurricane       0.19      0.13      0.16       195
+  landslides       0.04      0.08      0.05        61
+    wildfire       0.28      0.27      0.28       336
+
+    accuracy                           0.24      1284
+   macro avg       0.21      0.20      0.20      1284
+weighted avg       0.25      0.24      0.24      1284
+
+Class-wise Accuracy:
+{'earthquake': 0.573208722741433, 'flood': 0.6409657320872274, 'hurricane': 0.780373831775701, 'landslides': 0.8512461059190031, 'wildfire': 0.6292834890965732}
+
+removed early stopping and the LR decay:(30 epochs):
+Accuracy: 24.61%
+Class-wise Metrics:
+              precision    recall  f1-score   support
+
+  earthquake       0.32      0.31      0.32       386
+       flood       0.23      0.25      0.24       306
+   hurricane       0.14      0.12      0.13       195
+  landslides       0.04      0.03      0.03        61
+    wildfire       0.26      0.28      0.27       336
+
+    accuracy                           0.25      1284
+   macro avg       0.20      0.20      0.20      1284
+weighted avg       0.24      0.25      0.24      1284
+
+Class-wise Accuracy:
+{'earthquake': 0.5957943925233645, 'flood': 0.6253894080996885, 'hurricane': 0.7476635514018691, 'landslides': 0.9135514018691588, 'wildfire': 0.6098130841121495}
+
+same as befor but 70 epochs:
+Accuracy: 25.62%
+Class-wise Metrics:
+              precision    recall  f1-score   support
+
+  earthquake       0.34      0.28      0.31       386
+       flood       0.26      0.27      0.26       306
+   hurricane       0.15      0.15      0.15       195
+  landslides       0.06      0.07      0.06        61
+    wildfire       0.27      0.30      0.29       336
+
+    accuracy                           0.26      1284
+   macro avg       0.22      0.22      0.22      1284
+weighted avg       0.26      0.26      0.26      1284
+
+Class-wise Accuracy:
+{'earthquake': 0.6230529595015576, 'flood': 0.6362928348909658, 'hurricane': 0.7398753894080997, 'landslides': 0.9057632398753894, 'wildfire': 0.6074766355140186}
+
+
+added more layers to dense layer+batch normalization+L2 regularization and also decreased learning rate:
+Class-wise Metrics:
+earthquake Metrics:
+  Precision: 0.31
+  Recall: 0.42
+  F1-score: 0.36
+
+flood Metrics:
+  Precision: 0.23
+  Recall: 0.25
+  F1-score: 0.24
+
+hurricane Metrics:
+  Precision: 0.11
+  Recall: 0.07
+  F1-score: 0.08
+
+landslides Metrics:
+  Precision: 0.00
+  Recall: 0.00
+  F1-score: 0.00
+
+wildfire Metrics:
+  Precision: 0.23
+  Recall: 0.17
+  F1-score: 0.19
+
+Class-wise Accuracy:
+{'earthquake': 0.5373831775700935, 'flood': 0.6207165109034268, 'hurricane': 0.7757009345794392, 'landslides': 0.9166666666666666, 'wildfire': 0.6339563862928349}
+Average Accuracy: 69.69%
+
+
+###decreased learning rate further and trained for 50 epochs:
+earthquake Metrics:
+  Precision: 0.31
+  Recall: 0.45
+  F1-score: 0.37
+
+flood Metrics:
+  Precision: 0.24
+  Recall: 0.10
+  F1-score: 0.15
+
+hurricane Metrics:
+  Precision: 0.14
+  Recall: 0.08
+  F1-score: 0.10
+
+landslides Metrics:
+  Precision: 0.03
+  Recall: 0.03
+  F1-score: 0.03
+
+wildfire Metrics:
+  Precision: 0.28
+  Recall: 0.34
+  F1-score: 0.31
+
+Class-wise Accuracy:
+{'earthquake': 0.5327102803738317, 'flood': 0.706386292834891, 'hurricane': 0.7811526479750779, 'landslides': 0.9026479750778816, 'wildfire': 0.6035825545171339}
+Average Accuracy: 70.53%
+

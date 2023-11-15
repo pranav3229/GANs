@@ -1,0 +1,44 @@
+earthquake:
+    train:
+    Average SSIM: 0.9609015499295503
+    Average PSNR: inf //this implies near identical image
+
+    validation:
+    Average SSIM: 0.959053950439488
+    Average PSNR: inf //this implies near identical image
+
+flood:
+    train:
+    Average SSIM: 0.9455600747349181
+    Average PSNR: inf //this implies near identical image
+
+    validation:
+    Average SSIM: 0.937222685078552
+    Average PSNR: inf //this implies near identical image
+
+hurricane:
+    train:
+    Average SSIM: 0.9501339307745891
+    Average PSNR: inf //this implies near identical image
+
+    validation:
+    Average SSIM: 0.9501791048262285
+    Average PSNR: 28.171366152246797
+
+landslides:
+    train:
+    Average SSIM: 0.9034749331744149
+    Average PSNR: 25.806491866344796
+
+    validation:
+    Average SSIM: 0.9025374887197504
+    Average PSNR: 26.036796348719147
+
+wildfire:
+    train:
+    Average SSIM: 0.9500769424937406
+    Average PSNR: inf //this implies near identical image
+
+    validation:
+    Average SSIM: 0.9533389822400806
+    Average PSNR: inf //this implies near identical image
